@@ -20,8 +20,10 @@ const express = require('express');
 const app = express();
 const path= require('path');
 
-const adminData= require('./routes/admin');
+const adminRoutes= require('./routes/admin');
 const shopRoutes= require('./routes/shop');
+
+const errorController=require('./controllers/error');
 
 const bodyParser = require('body-parser');
 
@@ -36,7 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use(adminRoutes);----->when routes are different
 // app.use(shopRoutes);
 
-app.use('/admin',adminData.routes);// when routesrs path start with same segment 
+app.use('/admin',adminRoutes);// when routesrs path start with same segment 
 app.use(shopRoutes);
 
 // app.use('/product', (req, res, next) => {});-----> it executes for both POST & GET request or method.
@@ -46,8 +48,6 @@ app.use(shopRoutes);
 
 app.use('/favicon', (req, res, next) => {});
 
-app.use((req,res,next) => {
-    res.status(404).render('404', {pageTitle:'page not found', path:''});
-});
+app.use(errorController.page404);
 
 app.listen(3000); 
